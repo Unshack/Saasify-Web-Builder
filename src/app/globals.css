@@ -20,41 +20,73 @@ B (255 */
 
 @layer base {
   :root {
+    --background: 216 100% 98.04%;
+    --foreground: 213.6 100% 4.9%;
+
+    --primary: 214.12 100% 50%;
+    --primary-foreground: 0 0% 100%;
+
+    --card: 216 100% 98.04%;
+    --card-foreground: 213.6 100% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 213.6 100% 4.9%;
+
+    --secondary: 214.74 100% 92.55%;
+    --secondary-foreground: 216 100% 0.98%;
+
+    --muted: 213.6 100% 95.1%;
+    --muted-foreground: 0 0% 40%;
+
+    --accent: 213.6 100% 95.1%;
+    --accent-foreground: 214.12 100% 50%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 0 0% 90.2%;
+    --input: 0 0% 90.2%;
+    --ring: 214.12 100% 50%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
     /* Name: custom color palette
        Author: Ilias Ism
        URL: https://gradient.page */
 
     /* CSS: .bg-gradient { background: var(--gradient) } */
-    --gradient: url(/samples/green-glory/green-glory-003.jpg);
+    --gradient: linear-gradient(to top left, #007adf, #00ecbc);
 
-    --background: 210 26% 7.84%;
-    --foreground: 210 4% 99.9%;
+    --background: 220 65% 3.52%;
+    --foreground: 220 10% 97.2%;
 
-    --muted: 210 20% 29.4%;
-    --muted-foreground: 210 4% 59.8%;
+    --muted: 220 50% 13.2%;
+    --muted-foreground: 220 10% 54.4%;
 
-    --popover: 210 57% 12.74%;
-    --popover-foreground: 210 4% 99.9%;
+    --popover: 220 45% 5.72%;
+    --popover-foreground: 220 10% 97.2%;
 
-    --card: 210 57% 12.74%;
-    --card-foreground: 210 4% 99.9%;
+    --card: 220 45% 5.72%;
+    --card-foreground: 220 10% 97.2%;
 
-    --border: 210 20% 29.4%;
-    --input: 210 20% 29.4%;
+    --border: 220 50% 13.2%;
+    --input: 220 50% 13.2%;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 210 4% 9.8%;
+    --primary: 220 100% 44%;
+    --primary-foreground: 220 10% 97.2%;
 
-    --secondary: 210 20% 29.4%;
-    --secondary-foreground: 210 4% 99.9%;
+    --secondary: 220 50% 13.2%;
+    --secondary-foreground: 220 10% 97.2%;
 
-    --accent: 210 20% 29.4%;
-    --accent-foreground: 210 4% 99.9%;
+    --accent: 220 50% 13.2%;
+    --accent-foreground: 220 10% 97.2%;
 
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 4% 99.9%;
+    --destructive-foreground: 220 10% 97.2%;
 
-    --ring: 210 40% 98%;
+    --ring: 220 100% 44%;
   }
 }
 
