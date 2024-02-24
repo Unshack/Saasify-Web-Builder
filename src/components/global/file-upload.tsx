@@ -2,6 +2,7 @@ import { FileIcon, X } from "lucide-react";
 import Image from "next/image";
 import React from "react";
 import { Button } from "../ui/button";
+import { UploadDropzone } from "@/lib/uploadthing";
 
 type Props = {
   apiEndpoint: "agencyLogo" | "avatar" | "subaccountLogo";
@@ -43,7 +44,19 @@ const FileUpload = ({ apiEndpoint, onChange, value }: Props) => {
       </div>
     );
   }
-  return <div className="w-full bg-muted/30"></div>;
+  return (
+    <div className="w-full bg-muted/30">
+      <UploadDropzone
+        endpoint={apiEndpoint}
+        onClientUploadComplete={(res) => {
+          onChange(res?.[0].url);
+        }}
+        onUploadError={(error: Error) => {
+          console.log(error);
+        }}
+      />
+    </div>
+  );
 };
 
 export default FileUpload;
