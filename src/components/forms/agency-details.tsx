@@ -1,7 +1,7 @@
 "use client";
 
 import { Agency } from "@prisma/client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useToast } from "../ui/use-toast";
 import { AlertDialog } from "../ui/alert-dialog";
@@ -13,10 +13,11 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
-import { Form } from "../ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel } from "../ui/form";
 import { useForm } from "react-hook-form";
 
 import * as z from "zod";
+import FileUpload from "../global/file-upload";
 
 type Props = { data?: Partial<Agency> };
 
@@ -53,7 +54,17 @@ const AgencyDetails = ({ data }: Props) => {
       agencyLogo: data?.agencyLogo,
     },
   });
+  const isLoading = form.formState.isSubmitting;
 
+  useEffect(() => {
+    if (data) {
+      form.reset(data);
+    }
+  }, [data]);
+
+  const handleSubmit = async () => {};
+
+  // 2:17
   return (
     <AlertDialog>
       <Card className="w-full">
@@ -66,7 +77,26 @@ const AgencyDetails = ({ data }: Props) => {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <Form {...form}></Form>
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(handleSubmit)}
+              className="space-y-4"
+            >
+              <FormField
+                disabled={isLoading}
+                control={form.control}
+                name="agencyLogo"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Agency Logo</FormLabel>
+                    <FormControl>
+                      <FileUpload></FileUpload>
+                    </FormControl>
+                  </FormItem>
+                )}
+              ></FormField>
+            </form>
+          </Form>
         </CardContent>
       </Card>
     </AlertDialog>
