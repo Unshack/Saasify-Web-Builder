@@ -40,6 +40,7 @@ import { Input } from "../ui/input";
 import { Switch } from "../ui/switch";
 import { NumberInput } from "@tremor/react";
 import {
+  deleteAgency,
   saveActivityLogsNotification,
   updateAgencyDetails,
 } from "@/lib/queries";
@@ -91,7 +92,28 @@ const AgencyDetails = ({ data }: Props) => {
 
   const handleSubmit = async () => {};
 
-  // 2:17
+  const handleDeleteAgency = async () => {
+    if (!data?.id) return;
+    setDeletingAgency(true);
+    // WIP: discontinue the subscription
+    try {
+      const response = await deleteAgency(data.id);
+      toast({
+        title: "Deleted Agency",
+        description: "Deleted your agency and all subaccounts",
+      });
+      router.refresh();
+    } catch (error) {
+      console.log(error);
+      toast({
+        variant: "destructive",
+        title: "Oppss!",
+        description: "could not delete your agency",
+      });
+    }
+    setDeletingAgency(false);
+  };
+
   return (
     <AlertDialog>
       <Card className="w-full">
@@ -335,6 +357,7 @@ const AgencyDetails = ({ data }: Props) => {
               <AlertDialogAction
                 disabled={deletingAgency}
                 className="bg-destructive hover:bg-destructive"
+                onClick={handleDeleteAgency}
               >
                 Delete
               </AlertDialogAction>
