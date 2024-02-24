@@ -4,6 +4,8 @@ import { Agency } from "@prisma/client";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useToast } from "../ui/use-toast";
+import { v4 } from "uuid";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -41,8 +43,10 @@ import { Switch } from "../ui/switch";
 import { NumberInput } from "@tremor/react";
 import {
   deleteAgency,
+  initUser,
   saveActivityLogsNotification,
   updateAgencyDetails,
+  upsertAgency,
 } from "@/lib/queries";
 import { Button } from "../ui/button";
 import Loading from "../global/loading";
@@ -90,7 +94,71 @@ const AgencyDetails = ({ data }: Props) => {
     }
   }, [data]);
 
-  const handleSubmit = async () => {};
+  const handleSubmit = async (values: z.infer<typeof FormSchema>) => {
+    try {
+      let newUserData;
+      let custId;
+      if (!data?.id) {
+        const bodyData = {
+          email: values.companyEmail,
+          name: values.name,
+          shipping: {
+            address: {
+              city: values.city,
+              country: values.country,
+              line1: values.address,
+              postal_code: values.zipCode,
+              state: values.zipCode,
+            },
+            name: values.name,
+          },
+          address: {
+            city: values.city,
+            country: values.country,
+            line1: values.address,
+            postal_code: values.zipCode,
+            state: values.zipCode,
+          },
+        };
+      }
+
+      // WIP custId
+      newUserData = await initUser({ role: "AGENCY_OWNER" });
+      if (!data?.id) {
+        const response = await upsertAgency({
+          id: data?.id ? data.id : v4(),
+          address: values.address,
+          agencyLogo: values.agencyLogo,
+          city: values.city,
+          companyPhone: values.companyPhone,
+          country: values.country,
+          name: values.name,
+          state: values.state,
+          whiteLabel: values.whiteLabel,
+          zipCode: values.zipCode,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          companyEmail: values.companyEmail,
+          connectAccountId: "",
+          goal: 5,
+        });
+        toast({
+          title: "Created Agency",
+        });
+        if (data?.id) return router.refresh();
+        if (response) {
+          return router.refresh();
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      toast({
+        variant: "destructive",
+        title: "Oppss!",
+        description: "could not create your agency",
+      });
+    }
+  };
 
   const handleDeleteAgency = async () => {
     if (!data?.id) return;
