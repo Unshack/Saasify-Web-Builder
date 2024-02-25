@@ -20,7 +20,9 @@ export const getAuthUserDetails = async () => {
         include: {
           SidebarOption: true,
           SubAccount: {
-            include: { SidebarOption: true },
+            include: {
+              SidebarOption: true,
+            },
           },
         },
       },
@@ -46,7 +48,9 @@ export const saveActivityLogsNotification = async ({
     const response = await db.user.findFirst({
       where: {
         Agency: {
-          SubAccount: { some: { id: subaccountId } },
+          SubAccount: {
+            some: { id: subaccountId },
+          },
         },
       },
     });
@@ -117,6 +121,7 @@ export const saveActivityLogsNotification = async ({
 export const createTeamUser = async (agencyId: string, user: User) => {
   if (user.role === "AGENCY_OWNER") return null;
   const response = await db.user.create({ data: { ...user } });
+  return response;
 };
 
 export const verifyAndAcceptInvitation = async () => {
@@ -261,5 +266,8 @@ export const upsertAgency = async (agency: Agency, price?: Plan) => {
         },
       },
     });
-  } catch (error) {}
+    return agencyDetails;
+  } catch (error) {
+    console.log(error);
+  }
 };
