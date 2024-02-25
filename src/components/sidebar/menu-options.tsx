@@ -9,7 +9,7 @@ import {
 import React, { useEffect, useMemo, useState } from "react";
 import { Sheet, SheetClose, SheetContent, SheetTrigger } from "../ui/sheet";
 import { Button } from "../ui/button";
-import { ChevronsUpDown, Menu, PlusCircleIcon } from "lucide-react";
+import { ChevronsUpDown, Compass, Menu, PlusCircleIcon } from "lucide-react";
 import clsx from "clsx";
 import { AspectRatio } from "../ui/aspect-ratio";
 import Image from "next/image";
@@ -23,9 +23,12 @@ import {
   CommandList,
 } from "../ui/command";
 import Link from "next/link";
+import { twMerge } from "tailwind-merge";
 import { useModal } from "@/providers/modal-provider";
 import CustomModal from "../global/custom-modal";
 import SubAccountDetails from "../forms/subaccount-details";
+import { Separator } from "../ui/separator";
+import { icons } from "@/lib/constants";
 
 type Props = {
   defaultOpen?: boolean;
@@ -64,7 +67,7 @@ const MenuOptions = ({
     <Sheet modal={false} {...openState}>
       <SheetTrigger
         asChild
-        className="absolute left-4 top-4 z-[100] md:!hidden flex"
+        className="absolute left-4 top-4 z-[100] md:!hidden felx"
       >
         <Button variant="outline" size={"icon"}>
           <Menu />
@@ -98,6 +101,7 @@ const MenuOptions = ({
                 variant="ghost"
               >
                 <div className="flex items-center text-left gap-2">
+                  <Compass />
                   <div className="flex flex-col">
                     {details.name}
                     <span className="text-muted-foreground">
@@ -114,12 +118,12 @@ const MenuOptions = ({
               <Command className="rounded-lg">
                 <CommandInput placeholder="Search Accounts..." />
                 <CommandList className="pb-16">
-                  <CommandEmpty>No results found</CommandEmpty>
+                  <CommandEmpty> No results found</CommandEmpty>
                   {(user?.role === "AGENCY_OWNER" ||
                     user?.role === "AGENCY_ADMIN") &&
                     user?.Agency && (
                       <CommandGroup heading="Agency">
-                        <CommandItem className="!bg-transparent my-2 text-primary border-[1px] border-border p-2 rounded-md hover:!bg-muted cursor-pointer transition-all">
+                        <CommandItem className="!bg-transparent my-2 text-primary broder-[1px] border-border p-2 rounded-md hover:!bg-muted cursor-pointer transition-all">
                           {defaultOpen ? (
                             <Link
                               href={`/agency/${user?.Agency?.id}`}
@@ -178,7 +182,7 @@ const MenuOptions = ({
                                 <div className="relative w-16">
                                   <Image
                                     src={subaccount.subAccountLogo}
-                                    alt="Agency Logo"
+                                    alt="subaccount Logo"
                                     fill
                                     className="rounded-md object-contain"
                                   />
@@ -199,7 +203,7 @@ const MenuOptions = ({
                                   <div className="relative w-16">
                                     <Image
                                       src={subaccount.subAccountLogo}
-                                      alt="Subaccount Logo"
+                                      alt="subaccount Logo"
                                       fill
                                       className="rounded-md object-contain"
                                     />
@@ -222,7 +226,7 @@ const MenuOptions = ({
                   user?.role === "AGENCY_ADMIN") && (
                   <SheetClose>
                     <Button
-                      className="w-full flex gap-2 mt-2"
+                      className="w-full flex gap-2"
                       onClick={() => {
                         setOpen(
                           <CustomModal
@@ -246,6 +250,41 @@ const MenuOptions = ({
               </Command>
             </PopoverContent>
           </Popover>
+          <p className="text-muted-foreground text-xs mb-2">MENU LINKS</p>
+          <Separator className="mb-4" />
+          <nav className="relative">
+            <Command className="rounded-lg overflow-visible bg-transparent">
+              <CommandInput placeholder="Search..." />
+              <CommandList className="py-4 overflow-visible">
+                <CommandEmpty>No Results Found</CommandEmpty>
+                <CommandGroup className="overflow-visible">
+                  {sidebarOpt.map((sidebarOptions) => {
+                    let val;
+                    const result = icons.find(
+                      (icon) => icon.value === sidebarOptions.icon
+                    );
+                    if (result) {
+                      val = <result.path />;
+                    }
+                    return (
+                      <CommandItem
+                        key={sidebarOptions.id}
+                        className="md:w-[320px] w-full"
+                      >
+                        <Link
+                          href={sidebarOptions.link}
+                          className="flex items-center gap-2 hover:bg-transparent rounded-md transition-all md:w-full w-[320px]"
+                        >
+                          {val}
+                          <span>{sidebarOptions.name}</span>
+                        </Link>
+                      </CommandItem>
+                    );
+                  })}
+                </CommandGroup>
+              </CommandList>
+            </Command>
+          </nav>
         </div>
       </SheetContent>
     </Sheet>
