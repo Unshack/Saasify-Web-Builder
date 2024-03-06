@@ -3,7 +3,7 @@
 import { clerkClient, currentUser } from "@clerk/nextjs";
 import { db } from "./db";
 import { redirect } from "next/navigation";
-import { Agency, SubAccount, User } from "@prisma/client";
+import { Agency, Role, SubAccount, User } from "@prisma/client";
 import { v4 } from "uuid";
 
 export const getAuthUserDetails = async () => {
@@ -288,7 +288,7 @@ export const getNotificationAndUser = async (agencyId: string) => {
   }
 };
 
-export const upsertSubaccount = async (subAccount: SubAccount) => {
+export const upsertSubAccount = async (subAccount: SubAccount) => {
   if (!subAccount.companyEmail) return null;
   const agencyOwner = await db.user.findFirst({
     where: {
@@ -298,7 +298,7 @@ export const upsertSubaccount = async (subAccount: SubAccount) => {
       role: "AGENCY_OWNER",
     },
   });
-  if (!agencyOwner) return console.log("🔴Error could not create subaccount");
+  if (!agencyOwner) return console.log("🔴Erorr could not create subaccount");
   const permissionId = v4();
   const response = await db.subAccount.upsert({
     where: { id: subAccount.id },
@@ -452,4 +452,30 @@ export const getUser = async (id: string) => {
   });
 
   return user;
+};
+
+export const sendInvitation = async (
+  role: Role,
+  email: string,
+  agencyId: string
+) => {
+  const resposne = await db.invitation.create({
+    data: { email, agencyId, role },
+  });
+
+  try {
+    const invitation = await clerkClient.invitations.createInvitation({
+      emailAddress: email,
+      redirectUrl: process.env.NEXT_PUBLIC_URL,
+      publicMetadata: {
+        throughInvitation: true,
+        role,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+
+  return resposne;
 };
