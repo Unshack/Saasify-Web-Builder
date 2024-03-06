@@ -41,3 +41,5 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 
 - npm i prisma @prisma/client
 - npx prisma init --datasource-provider mysql
+
+## make it work!
